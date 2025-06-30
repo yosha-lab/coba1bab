@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fragments of Reality</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      overflow: hidden;
+    }
+    #bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      transition: opacity 1s ease;
+    }
+    #char {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-height: 80vh;
+      transition: opacity 0.5s ease;
+    }
+    #dialog-box {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 20px;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    #name {
+      font-weight: bold;
+      color: #57d3ff;
+      margin-bottom: 5px;
+    }
+    #next-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #57d3ff;
+      border: none;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    #next-btn:hover {
+      background: #3fb5e6;
+    }
+  </style>
+</head>
+<body>
+  <img id="bg" src="bg1&2.jpg" alt="background">
+  <img id="char" src="kaito.png" alt="kaito">  <div id="dialog-box">
+    <div id="name">Kaito</div>
+    <div id="dialog">Hah... hari pertama sekolah lagi. Tapi... kenapa rasanya aneh ya?</div>
+    <button id="next-btn">Lanjut</button>
+  </div>  <script>
+    const scenes = [
+      // Bab 1 - Hari yang Biasa (?)
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Hah... hari pertama sekolah lagi. Tapi... kenapa rasanya aneh ya?" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Langitnya cerah, jalan ke sekolah juga lancar... tapi hati gue nggak tenang." },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "WOII Kaito! Masih hidup lo?! Hahaha!" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Genta... lo rame banget kayak biasa..." },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "Biar semangat sekolah, cuy! Hari pertama tuh harus gaspol!" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Tapi... papan tulis itu... kenapa udah penuh tulisan? Belum ada guru masuk..." },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "Hah? Tulisan apaan? Kosong tuh..." },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "(Apa cuma gue yang liat ini?)" },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "Eh jangan bengong, duduk gih! Ntar lo dikira kerasukan." },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Heh, iya iya..." },
+
+      // Bab 2 - Jam yang Berhenti
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Jam dinding...? Kok nggak gerak?" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Tapi semua orang jalan kayak biasa..." },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Genta... lo liat jam?" },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "Ya liat lah, kenapa?" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Itu jarumnya berhenti di angka 7." },
+      { bg: "bg1&2.jpg", char: "genta.png", name: "Genta", text: "Yeee itu jam rusak kali. Biasa juga gitu tuh." },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "(Tapi rasanya kayak semua jam di dunia juga ikutan berhenti...)" },
+      { bg: "bg1&2.jpg", char: "reva.png", name: "Reva", text: "Kamu juga mulai sadar ya?" },
+      { bg: "bg1&2.jpg", char: "kaito.png", name: "Kaito", text: "Eh? Reva...? Maksud lo?" },
+      { bg: "bg1&2.jpg", char: "reva.png", name: "Reva", text: "Nanti kamu ngerti sendiri. Tapi jangan bilang siapa-siapa." },
+
+      // Bab 3 - Dimulai dari Mimpi
+      { bg: "bg3.jpg", char: "kaito.png", name: "Kaito", text: "Ini tempat apa...?" },
+      { bg: "bg3.jpg", char: "kaito.png", name: "Kaito", text: "Kayak aula, tapi semuanya putih... dan sepi..." },
+      { bg: "bg3.jpg", char: "reva.png", name: "Reva", text: "Kaito... kamu inget tempat ini?" },
+      { bg: "bg3.jpg", char: "kaito.png", name: "Kaito", text: "Reva? Lo juga di sini?" },
+      { bg: "bg3.jpg", char: "reva.png", name: "Reva", text: "Ini bukan mimpi. Ini bagian dari memori kamu yang dikunci." },
+      { bg: "bg3.jpg", char: "kaito.png", name: "Kaito", text: "Kunci? Kenapa dikunci?" },
+      { bg: "bg3.jpg", char: "reva.png", name: "Reva", text: "Karena kamu milih buat nggak inget." },
+      { bg: "bg3.jpg", char: "kaito.png", name: "Kaito", text: "Apa yang gue lupakan...?" },
+      { bg: "bg3.jpg", char: "reva.png", name: "Reva", text: "Itu yang harus kamu cari." },
+      { bg: "bg3.jpg", char: "reva.png", name: "Reva", text: "Tapi inget... jangan percaya semua yang kamu lihat." },
+    ];
+
+    let index = 0;
+    const bg = document.getElementById("bg");
+    const char = document.getElementById("char");
+    const nameBox = document.getElementById("name");
+    const dialogBox = document.getElementById("dialog");
+    const nextBtn = document.getElementById("next-btn");
+
+    nextBtn.addEventListener("click", () => {
+      index++;
+      if(index >= scenes.length) {
+        dialogBox.textContent = "Tamat Sementara. Bab 4 Segera Hadir.";
+        nameBox.textContent = "";
+        nextBtn.style.display = "none";
+        char.style.opacity = 0;
+        return;
+      }
+
+      const current = scenes[index];
+      bg.src = current.bg;
+      char.src = current.char;
+      nameBox.textContent = current.name;
+      dialogBox.textContent = current.text;
+      char.style.opacity = 1;
+    });
+  </script></body>
+</html>
